@@ -13,12 +13,34 @@ function App() {
     { id: 4, title: "C++", body: "Description" },
   ]);
 
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+
+  const addNewPost = () => {
+    const newPost = { id: Date.now(), title, body };
+    setPosts([...posts, newPost]);
+    setTitle("");
+    setBody("");
+  };
+
   return (
     <div className="App">
       <form>
-        <MyInput type="text" placeholder="Post name" />
-        <MyInput type="text" placeholder="Post body" />
-        <MyButton>Create Post</MyButton>
+        <MyInput
+          type="text"
+          placeholder="Post name"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <MyInput
+          type="text"
+          placeholder="Post body"
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
+        />
+        <MyButton onClick={addNewPost} type="button">
+          Create Post
+        </MyButton>
       </form>
       <PostList posts={posts} title="Post List" />
     </div>
