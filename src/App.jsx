@@ -13,14 +13,12 @@ function App() {
     { id: 4, title: "C++", body: "Description" },
   ]);
 
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
+  const [post, setPost] = useState({ title: "", body: "" });
 
   const addNewPost = () => {
-    const newPost = { id: Date.now(), title, body };
+    const newPost = { ...post, id: Date.now() };
     setPosts([...posts, newPost]);
-    setTitle("");
-    setBody("");
+    setPost({ title: "", body: "" });
   };
 
   return (
@@ -29,14 +27,14 @@ function App() {
         <MyInput
           type="text"
           placeholder="Post name"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          value={post.title}
+          onChange={(e) => setPost({ ...post, title: e.target.value })}
         />
         <MyInput
           type="text"
           placeholder="Post body"
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
+          value={post.body}
+          onChange={(e) => setPost({ ...post, body: e.target.value })}
         />
         <MyButton onClick={addNewPost} type="button">
           Create Post
