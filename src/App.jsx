@@ -14,13 +14,10 @@ function App() {
     { id: 4, title: "C++", body: "Dummy Description" },
   ]);
 
-  const [post, setPost] = useState({ title: "", body: "" });
-
   const [selectedSort, setSelectedSort] = useState("");
 
   const createPost = (post) => {
     setPosts([...posts, post]);
-    setPost({ title: "", body: "" });
   };
 
   const removePost = (id) => {
