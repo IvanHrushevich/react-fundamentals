@@ -2,8 +2,7 @@ import { useMemo, useState } from "react";
 
 import PostList from "./components/PostList";
 import PostForm from "./components/PostForm";
-import MySelect from "./components/UI/select/MySelect";
-import MyInput from "./components/UI/input/MyInput";
+import PostFilter from "./components/PostFilter";
 
 import "./styles/App.css";
 
@@ -15,22 +14,19 @@ function App() {
     { id: 4, title: "C++", body: "Dummy Description" },
   ]);
 
-  const [selectedSort, setSelectedSort] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [filter, setFilter] = useState({ sort: "", query: "" });
 
   const sortedPosts = useMemo(() => {
-    return selectedSort
-      ? [...posts].sort((a, b) =>
-          a[selectedSort].localeCompare(b[selectedSort])
-        )
+    return filter.sort
+      ? [...posts].sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]))
       : posts;
-  }, [selectedSort, posts]);
+  }, [filter.sort, posts]);
 
   const sortedAndSearchedPosts = useMemo(() => {
     return sortedPosts.filter((post) =>
-      post.title.toLowerCase().includes(searchQuery.toLowerCase())
+      post.title.toLowerCase().includes(filter.query.toLowerCase())
     );
-  }, [searchQuery, sortedPosts]);
+  }, [filter.query, sortedPosts]);
 
   const createPost = (post) => {
     setPosts([...posts, post]);
@@ -40,30 +36,11 @@ function App() {
     setPosts(posts.filter((post) => post.id !== id));
   };
 
-  const sortPosts = (sort) => {
-    setSelectedSort(sort);
-
-    setPosts(sortedPosts);
-  };
-
   return (
     <div className="App">
       <PostForm create={createPost} />
       <hr style={{ margin: "15px 0" }} />
-      <MyInput
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        placeholder="Search..."
-      />
-      <MySelect
-        options={[
-          { value: "title", name: "By name" },
-          { value: "body", name: "By body" },
-        ]}
-        value={selectedSort}
-        onChange={sortPosts}
-        defaultValue="Sort by"
-      />
+      <PostFilter filter={filter} setFilter={setFilter} />
       <PostList
         posts={sortedAndSearchedPosts}
         title="Post List"
