@@ -7,17 +7,21 @@ import PostFilter from "./components/PostFilter";
 import MyModal from "./components/UI/modal/MyModal";
 import MyButton from "./components/UI/button/MyButton";
 import Loader from "./components/UI/loader/Loader";
+import PostService from "./API/PostService";
 import { usePosts } from "./hooks/usePosts";
+import { useFetching } from "./hooks/useFetching";
 
 import "./styles/App.css";
-import PostService from "./API/PostService";
 
 function App() {
   const [posts, setPosts] = useState([]);
   const [filter, setFilter] = useState({ sort: "", query: "" });
   const [modal, setModal] = useState(false);
-  const [isPostLoading, setIsPostLoading] = useState(false);
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
+  const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
+    const posts = await PostService.getAll();
+    setPosts(posts);
+  });
 
   useEffect(() => {
     fetchPosts();
@@ -32,17 +36,6 @@ function App() {
     setPosts(posts.filter((post) => post.id !== id));
   };
 
-  async function fetchPosts() {
-    setIsPostLoading(true);
-
-    // fake timeout to show loader
-    setTimeout(async () => {
-      const posts = await PostService.getAll();
-      setPosts(posts);
-      setIsPostLoading(false);
-    }, 1000);
-  }
-
   return (
     <div className="App">
       <MyButton onClick={() => setModal(true)} style={{ marginTop: 30 }}>
@@ -53,7 +46,8 @@ function App() {
       </MyModal>
 
       <PostFilter filter={filter} setFilter={setFilter} />
-      {isPostLoading ? (
+      {postError && <h1>Error: {postError}</h1>}
+      {isPostsLoading ? (
         <div
           style={{ display: "flex", justifyContent: "center", marginTop: 50 }}
         >
