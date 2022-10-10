@@ -11,9 +11,10 @@ import PostService from "./API/PostService";
 import { usePosts } from "./hooks/usePosts";
 import { useFetching } from "./hooks/useFetching";
 
-import { createArrayOfDigits, getPageCount } from "./utils/pages";
+import { getPageCount } from "./utils/pages";
 
 import "./styles/App.css";
+import Pagination from "./components/UI/pagination/Pagination";
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -22,9 +23,6 @@ function App() {
   const [totalPages, setTotalPages] = useState(0);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
-
-  // TODO: use useMemo
-  const pagesArray = createArrayOfDigits(totalPages);
 
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
   const [fetchPosts, isPostsLoading, postError] = useFetching(
@@ -80,18 +78,11 @@ function App() {
           remove={removePost}
         />
       )}
-
-      <div className="page_wrapper">
-        {pagesArray.map((pageNumber) => (
-          <span
-            className={pageNumber === page ? "page page__current" : "page"}
-            onClick={() => changePage(pageNumber)}
-            key={pageNumber}
-          >
-            {pageNumber}
-          </span>
-        ))}
-      </div>
+      <Pagination
+        totalPages={totalPages}
+        currentPage={page}
+        changePage={changePage}
+      />
     </div>
   );
 }
