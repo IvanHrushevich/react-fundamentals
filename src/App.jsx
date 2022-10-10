@@ -1,4 +1,5 @@
 import Posts from "./pages/Posts";
+import Post from "./pages/Post";
 import About from "./pages/About";
 import Root from "./components/Root";
 
@@ -19,6 +20,10 @@ function App() {
         {
           path: "/posts",
           element: <Posts />,
+        },
+        {
+          path: "/posts/:id",
+          element: <Post />,
         },
         {
           path: "*",
