@@ -11,20 +11,35 @@ import PostService from "./API/PostService";
 import { usePosts } from "./hooks/usePosts";
 import { useFetching } from "./hooks/useFetching";
 
+import { createArrayOfDigits, getPageCount } from "./utils/pages";
+
 import "./styles/App.css";
 
 function App() {
   const [posts, setPosts] = useState([]);
   const [filter, setFilter] = useState({ sort: "", query: "" });
   const [modal, setModal] = useState(false);
+  const [totalPages, setTotalPages] = useState(0);
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1);
+
+  // TODO: use useMemo
+  const pagesArray = createArrayOfDigits(totalPages);
+
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
-  const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
-    const posts = await PostService.getAll();
-    setPosts(posts);
-  });
+  const [fetchPosts, isPostsLoading, postError] = useFetching(
+    async (limit, page) => {
+      const response = await PostService.getAll(limit, page);
+      setPosts(response.data);
+
+      const totalPostCount = response.headers["x-total-count"];
+      const totalPages = getPageCount(totalPostCount, limit);
+      setTotalPages(totalPages);
+    }
+  );
 
   useEffect(() => {
-    fetchPosts();
+    fetchPosts(limit, page);
   }, []);
 
   const createPost = (post) => {
@@ -34,6 +49,11 @@ function App() {
 
   const removePost = (id) => {
     setPosts(posts.filter((post) => post.id !== id));
+  };
+
+  const changePage = (page) => {
+    setPage(page);
+    fetchPosts(limit, page);
   };
 
   return (
@@ -60,6 +80,18 @@ function App() {
           remove={removePost}
         />
       )}
+
+      <div className="page_wrapper">
+        {pagesArray.map((pageNumber) => (
+          <span
+            className={pageNumber === page ? "page page__current" : "page"}
+            onClick={() => changePage(pageNumber)}
+            key={pageNumber}
+          >
+            {pageNumber}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
