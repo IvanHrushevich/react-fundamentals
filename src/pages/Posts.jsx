@@ -54,7 +54,7 @@ function Posts() {
   };
 
   return (
-    <div>
+    <div className="container">
       <MyButton onClick={() => setModal(true)} style={{ marginTop: 30 }}>
         Create Post
       </MyButton>
