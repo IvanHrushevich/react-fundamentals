@@ -6,7 +6,9 @@
 
 #root {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
 .container {
@@ -49,4 +51,17 @@
 .page__current {
   border: 2px solid orange;
   font-weight: bold;
+}
+
+.navbar {
+  height: 50px;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  background-color: lightgray;
+}
+
+.navbar_links {
+  margin-left: auto;
 }
