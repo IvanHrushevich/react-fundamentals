@@ -5,7 +5,9 @@ function Root() {
     <>
       <div className="navbar">
         <div className="navbar_links">
-          <Link to="/about">About</Link>
+          <Link to="/about" style={{ marginRight: 20 }}>
+            About
+          </Link>
           <Link to="/posts">Posts</Link>
         </div>
       </div>
