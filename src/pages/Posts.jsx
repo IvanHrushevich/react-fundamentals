@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import PostFilter from "../components/PostFilter";
 import PostForm from "../components/PostForm";
@@ -8,10 +8,11 @@ import PostService from "../API/PostService";
 import MyButton from "../components/UI/button/MyButton";
 import Loader from "../components/UI/loader/Loader";
 import MyModal from "../components/UI/modal/MyModal";
+import MySelect from "../components/UI/select/MySelect";
 import { useFetching } from "../hooks/useFetching";
+import { useObserver } from "../hooks/useObserver";
 import { usePosts } from "../hooks/usePosts";
 import { getPageCount } from "../utils/pages";
-import { useObserver } from "../hooks/useObserver";
 
 function Posts() {
   const [posts, setPosts] = useState([]);
@@ -41,7 +42,7 @@ function Posts() {
 
   useEffect(() => {
     fetchPosts(limit, page);
-  }, [page]);
+  }, [page, limit]);
 
   const createPost = (post) => {
     setPosts([...posts, post]);
@@ -61,6 +62,17 @@ function Posts() {
         <PostForm create={createPost} />
       </MyModal>
       <PostFilter filter={filter} setFilter={setFilter} />
+      <MySelect
+        value={limit}
+        onChange={(value) => setLimit(value)}
+        defaultValue="Posts per page"
+        options={[
+          { value: 5, name: "5" },
+          { value: 10, name: "10" },
+          { value: 25, name: "25" },
+          { value: -1, name: "All" },
+        ]}
+      />
 
       {postError && <h1>Error: {postError}</h1>}
 
