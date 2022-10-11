@@ -7,10 +7,15 @@ import { AuthContext } from "../context/index";
 function Root() {
   const { isAuth, setIsAuth } = useContext(AuthContext);
 
+  const logout = () => {
+    setIsAuth(false);
+    localStorage.removeItem("auth");
+  };
+
   return (
     <>
       <div className="navbar">
-        <MyButton onClick={() => setIsAuth(false)}>Log out</MyButton>
+        <MyButton onClick={logout}>Log out</MyButton>
         <div className="navbar_links">
           <Link to="/about" style={{ marginRight: 20 }}>
             About
