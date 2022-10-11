@@ -1,6 +1,6 @@
 import classes from "./MyButton.module.css";
 
-const PostList = ({ children, ...props }) => {
+const MyButton = ({ children, ...props }) => {
   return (
     <button {...props} className={classes.myBtn}>
       {children}
@@ -8,4 +8,4 @@ const PostList = ({ children, ...props }) => {
   );
 };
 
-export default PostList;
+export default MyButton;

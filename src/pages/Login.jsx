@@ -6,7 +6,6 @@ import { AuthContext } from "../context/index";
 
 function Login() {
   const { isAuth, setIsAuth } = useContext(AuthContext);
-  console.log("isAuth", isAuth);
 
   return (
     <div style={{ marginTop: 20 }}>
